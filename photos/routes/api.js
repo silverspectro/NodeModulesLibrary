@@ -11,6 +11,7 @@ var API = function() {
 console.log(arguments);
 
 var names = [];
+this.items = [];
 
 for(var args = 0; args < arguments.length; args++) {
   names.push(arguments[args]);
@@ -37,8 +38,6 @@ this.router = express.Router();
     today = mm+'-'+dd+'-'+yyyy;
     return today;
   }
-
-  var items = [];
 
   function createDir(names) {
     if(fs.existsSync(__dirname + "/api")) {
@@ -192,6 +191,7 @@ this.router = express.Router();
       }
     }
     item.created = new Date();
+    item.type = req.url.slice(1);
     item._index = items.length;
 
     var lowerItem = {};
@@ -305,6 +305,5 @@ router.use(function(req, res, next) {
     });
 
 }
-
 
 module.exports = API;

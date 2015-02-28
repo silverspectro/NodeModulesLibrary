@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+<%- include("partials/head") %>
+
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
+  <% items.forEach(function(item){ %>
+    <a href="<%= item.type+"/"+item._index %>"><h1><%= item.title %></h1></a>
+    <p><%= item.description %></p>
+  <% }) %>
+
+<%- include("partials/footer") %>
