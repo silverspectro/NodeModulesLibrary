@@ -1,0 +1,19 @@
+{
+  "name": "imageUpload",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverspectro/NodeModulesLibrary.git"
+  },
+  "author": "Ciro DE CARO",
+  "license": "CC-SA",
+  "bugs": {
+    "url": "https://github.com/silverspectro/NodeModulesLibrary/issues"
+  },
+  "homepage": "https://github.com/silverspectro/NodeModulesLibrary"
+}
