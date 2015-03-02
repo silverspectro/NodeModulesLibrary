@@ -1,0 +1,21 @@
+<%- include("partials/head") %>
+
+  <body>
+
+  <% if(project == "none") { %>
+
+    <% items.projects.forEach(function(project){ %>
+
+      <h1><a href="<%= project.type + "/" + project._index %>"><%= project.title %></a></h1>
+      <%- marked(project.description) %>
+
+    <% }) %>
+
+  <% } else if(projects == "none") { %>
+
+    <h1><%= project.title %></h1>
+    <%- marked(project.description) %>
+
+  <% } %>
+
+<%- include("partials/footer") %>

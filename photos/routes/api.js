@@ -8,7 +8,6 @@ var express = require("express");
 var server = express();
 
 var API = function() {
-console.log(arguments);
 
 var names = [];
 this.items = [];
@@ -95,19 +94,42 @@ this.router = express.Router();
   server.use(bodyParser.json());  //automatically convert to JSON
   server.use(methodOverride());
 
-  function LoadorInitialize(file, callback) {
-    fs.exists(file, function(exist){
-      if(exist) {
-        fs.readFile(file,"utf8", function(err, data){
-          if(err)throw err;
-          var data = data.toString();
-          items = JSON.parse(data || "[]");
-          callback(items);
+  function LoadorInitialize(files, callback) {
+    if(typeof files === "object") {
+      files.forEach(function(file, index){
+        var prop = names[index];
+        fs.exists(file, function(exist){
+          if(exist) {
+            fs.readFile(file,"utf8", function(err, data){
+              if(err)throw err;
+              var data = data.toString();
+              items[prop] = JSON.parse(data || "[]");
+              if (!items[prop]._length) {
+                items[prop]._length = 0;
+              } else {
+                items[prop]._length++;
+              }
+            });
+          } else {
+            callback([]);
+          }
         });
-      } else {
-        callback([]);
-      }
-    });
+      });
+      callback(items)
+    } else {
+      fs.exists(files, function(exist){
+        if(exist) {
+          fs.readFile(files,"utf8", function(err, data){
+            if(err)throw err;
+            var data = data.toString();
+            els = JSON.parse(data || "[]");
+            callback(els);
+          });
+        } else {
+          callback([]);
+        }
+      });
+    }
   };
   //access /, /index, /title, /0-2
   function listitems(file, req, res, itemIndex) {
@@ -176,6 +198,7 @@ this.router = express.Router();
         res.end("item added");
       }
     });
+    listitems(files, req, res);
   };
 
   function additem(file, itemDescription, req ,res) {
@@ -192,7 +215,7 @@ this.router = express.Router();
     }
     item.created = new Date();
     item.type = req.url.slice(1);
-    item._index = items.length;
+    item._index = items[req.url.slice(1)].length;
 
     var lowerItem = {};
     for(prop in item) {
@@ -206,49 +229,55 @@ this.router = express.Router();
   };
 
   function deleteitem(file, itemIndex, req, res) {
+    var db_name = req.params.db_name;
+    var temp = items[db_name];
     if(isNaN(itemIndex)) {
       res.status(404);
       res.end("Not a item, enter a number");
-    } else if(!items[itemIndex]) {
+    } else if(!temp[itemIndex]) {
       res.status(404);
       res.end("Not a listed item");
     } else {
       LoadorInitialize(file, function(items){
         items.splice(itemIndex, 1);
+        items.forEach(function(item){
+          item._index = item._index - 1;
+        });
         storeitem(file, items, "\n\nitem " + itemIndex +" deleted", req, res);
       });
     }
   };
 
   function modifyitem(file, itemDescription, itemIndex, req, res) {
+    var db_name = req.params.db_name;
+    var temp = items[db_name];
     if(itemDescription) {
       if(isNaN(itemIndex)) {
         res.status(404);
         res.end("Not a item, enter a number");
-      } else if(!items[itemIndex]) {
-      	console.log(items);
+      } else if(!temp[itemIndex]) {
         res.status(404);
         res.end("Not a item, enter a number");
       } else {
         LoadorInitialize(file, function(items){
           var item = {};
           if(Object.keys(itemDescription)) {
-            var item = itemDescription;
+            item = itemDescription;
             for(high in item) {
               item[high.toLowerCase()] = item[high];
             }
-            if(items[itemIndex]) {
+            if(temp[itemIndex]) {
               for(prop in item) {
-                if(prop !== "created")items[itemIndex][prop.toLowerCase()] = item[prop.toLowerCase()];
+                if(prop !== "created" && prop !== "_index")temp[itemIndex][prop.toLowerCase()] = item[prop.toLowerCase()];
               }
             } else {
-              items[itemIndex] = itemDescription;
+              temp[itemIndex] = itemDescription;
             }
           }else {
             item = itemDescription;
-            items[itemIndex].description = itemDescription;
+            temp[itemIndex].description = itemDescription;
           }
-          storeitem(file, items, "item " + itemIndex + " modified", req, res);
+          storeitem(file, temp, "item " + itemIndex + " modified", req, res);
         });
       }
     } else {
@@ -263,6 +292,11 @@ router.use(function(req, res, next) {
   next();
 });
 
+
+  router.route("/")
+  .get(function(req, res){
+    listitems(files, req, res);
+  });
 
   //on routes that end in projects
   router.route("/:db_name")

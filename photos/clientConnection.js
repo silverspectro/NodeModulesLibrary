@@ -16,8 +16,9 @@ module.exports = getRequest = function(host, port, path, callback) {
   http.request(getReq, function(res){
     res.setEncoding("utf8");
     res.on("data", function(apidata){
-      items = JSON.parse(apidata);
-      if(callback)callback(items);
+      var data = JSON.parse(apidata);
+      app.set("items", items);
+      if(callback)callback(data);
     });
   }).end();
 }
@@ -39,8 +40,8 @@ module.exports = postRequest = function(host, port, path, data, callback) {
   var post_req = http.request(postOptions, function(res){
     res.setEncoding("utf8");
     res.on("data", function(apidata){
-      items = apidata;
-      if(callback)callback(items);
+      data = apidata;
+      if(callback)callback(data);
     });
   });
 
@@ -59,9 +60,9 @@ module.exports = deleteRequest = function(host, port, path, callback) {
   http.request(delReq, function(res){
     res.setEncoding("utf8");
     res.on("data", function(apidata){
-      items = apidata;
-      app.set("items", items);
-      if(callback)callback(items);
+      var data = apidata;
+      app.set("item", data);
+      if(callback)callback(data);
     });
   }).end();
 };
@@ -83,9 +84,9 @@ module.exports = putRequest = function(host, port, path, data, callback) {
   var put_req = http.request(putOptions, function(res){
     res.setEncoding("utf8");
     res.on("data", function(apidata){
-      items = apidata;
-      app.set("items", items);
-      if(callback)callback(items);
+      data = apidata;
+      app.set("items", data);
+      if(callback)callback(data);
     });
   });
 
@@ -95,23 +96,23 @@ module.exports = putRequest = function(host, port, path, data, callback) {
 
 /*io.on('connection', function (socket) {
   socket.on('post', function(path, message){
-    postRequest("localhost", "3000", path, message, function(items){
-      console.log(items);
+    postRequest("localhost", "3000", path, message, function(data){
+      console.log(data);
     });
   });
   socket.on('get', function(path, message){
-    getRequest("localhost", "3000", path, function(items){
-      console.log(items);
+    getRequest("localhost", "3000", path, function(data){
+      console.log(data);
     });
   });
   socket.on('delete', function(path, id){
-    deleteRequest("localhost", "3000", path + id, function(items){
-      console.log(items);
+    deleteRequest("localhost", "3000", path + id, function(data){
+      console.log(data);
     });
   });
   socket.on('put', function(path, id, message){
-    putRequest("localhost", "3000", path + id, message, function(items){
-      console.log(items);
+    putRequest("localhost", "3000", path + id, message, function(data){
+      console.log(data);
     });
   });
 });*/

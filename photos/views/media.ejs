@@ -1,0 +1,21 @@
+<%- include("partials/head") %>
+
+  <body>
+
+    <% if(media == "none") { %>
+
+      <% items.media.forEach(function(media){ %>
+
+        <h1><a href="<%= media.type + "/" + media._index %>"><%= media.title %></a></h1>
+        <img src="<%= media.url %>"/>
+
+      <% }) %>
+
+    <% } else if(medias == "none") { %>
+
+      <h1><%= media.title %></h1>
+      <img src="<%= media.url %>"/>
+
+    <% } %>
+
+<%- include("partials/footer") %>

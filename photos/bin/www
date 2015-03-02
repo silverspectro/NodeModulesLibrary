@@ -28,9 +28,14 @@ require('../clientConnection')(server, app);
  */
 
 server.listen(port, function(req, res){
-  getRequest("localhost", "3000", "/api/posts", function(items){
-   items = items;
+  getRequest("localhost", "3000", "/api", function(data){
+    items = data;
   });
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
 });
 server.on('error', onError);
 server.on('listening', onListening);

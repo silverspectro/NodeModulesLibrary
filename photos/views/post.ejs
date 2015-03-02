@@ -1,7 +1,21 @@
 <%- include("partials/head") %>
 
   <body>
-    <h1><%= items.title %></h1>
-    <p><%- marked(items.description) %></p>
+
+  <% if(post == "none") { %>
+
+    <% items.posts.forEach(function(post){ %>
+
+      <h1><a href="<%= post.type + "/" + post._index %>"><%= post.title %></a></h1>
+      <%- marked(post.description) %>
+
+    <% }) %>
+
+  <% } else if(posts == "none") { %>
+
+    <h1><%= post.title %></h1>
+    <%- marked(post.description) %>
+
+  <% } %>
 
 <%- include("partials/footer") %>

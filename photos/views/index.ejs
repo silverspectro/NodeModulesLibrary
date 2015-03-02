@@ -1,9 +1,24 @@
 <%- include("partials/head") %>
 
   <body>
-  <% items.forEach(function(item){ %>
-    <a href="<%= item.type+"/"+item._index %>"><h1><%= item.title %></h1></a>
-    <p><%- marked(item.description) %></p>
-  <% }) %>
+  <ul>
+  <% for(item in items) { %>
+    <% if(item !== "_locals") { %>
+      <a href="<%= item %>"><li style="display:inline-block;margin-left: 2%;"><%= item %></li></a>
+    <% } %>
+  <% } %>
+  </ul>
+  <% for(item in items) { %>
+    <% if(items[item]._length >= 0) { %>
+      <% items[item].forEach(function(el){ %>
+        <h1><a href="<%= el.type+"/"+el._index %>"><%= el.title %></a> - <small><%= el.type %></small></h1>
+        <% if(el.description) { %>
+          <p><%- marked(el.description) %></p>
+        <% } else if(el.url) { %>
+          <p><%= el.url %></p>
+        <% } %>
+      <% }) %>
+    <% } %>
+  <% } %>
 
 <%- include("partials/footer") %>

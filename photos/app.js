@@ -7,7 +7,9 @@ var bodyParser = require('body-parser');
 
 var home = require('./routes/index');
 var users = require('./routes/users');
-var post = require('./routes/post')
+var post = require('./routes/post');
+var media = require('./routes/media');
+var projects = require('./routes/projects');
 
 var API = require("./routes/api");
 var api = API('posts','media','projects');
@@ -30,6 +32,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', home);
 app.use("/posts", post);
+app.use("/media", media);
+app.use("/projects", projects);
 app.use("/api", router);  //coming from API module
 app.use('/users', users);
 
