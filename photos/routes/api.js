@@ -210,7 +210,6 @@ this.router = express.Router();
       res.status(404);
       res.end("Not a item, enter a number");
     } else if(!items[itemIndex]) {
-      console.log(items);
       res.status(404);
       res.end("Not a listed item");
     } else {
@@ -227,6 +226,7 @@ this.router = express.Router();
         res.status(404);
         res.end("Not a item, enter a number");
       } else if(!items[itemIndex]) {
+      	console.log(items);
         res.status(404);
         res.end("Not a item, enter a number");
       } else {

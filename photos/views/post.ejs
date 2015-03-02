@@ -2,6 +2,6 @@
 
   <body>
     <h1><%= items.title %></h1>
-    <p><%= items.description %></p>
+    <p><%- marked(items.description) %></p>
 
 <%- include("partials/footer") %>

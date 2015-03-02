@@ -6,7 +6,6 @@ var router = express.Router();
 router.get('/:id', function(req, res, next) {
   console.log(req.params.id);
   getRequest("localhost", "3000", "/api/posts/"+req.params.id, function(items){
-    console.log(items);
     res.render('post', items);
   });
 });

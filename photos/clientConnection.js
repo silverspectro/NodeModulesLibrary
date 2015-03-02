@@ -1,9 +1,9 @@
 var http= require("http");
 var qs = require("querystring");
-//module.exports = marked = require("marked");
+module.exports = marked = require("marked");
 module.exports = function(server, app){
 
-  var io = require("socket.io")(server);
+  //var io = require("socket.io")(server);
 
 module.exports = getRequest = function(host, port, path, callback) {
   var getReq = {
@@ -93,9 +93,8 @@ module.exports = putRequest = function(host, port, path, data, callback) {
   put_req.end();
 };
 
-io.on('connection', function (socket) {
+/*io.on('connection', function (socket) {
   socket.on('post', function(path, message){
-    console.log(message);
     postRequest("localhost", "3000", path, message, function(items){
       console.log(items);
     });
@@ -110,10 +109,10 @@ io.on('connection', function (socket) {
       console.log(items);
     });
   });
-  socket.on('edit', function(path, id, message){
+  socket.on('put', function(path, id, message){
     putRequest("localhost", "3000", path + id, message, function(items){
       console.log(items);
     });
   });
-});
+});*/
 }

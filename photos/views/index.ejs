@@ -3,7 +3,7 @@
   <body>
   <% items.forEach(function(item){ %>
     <a href="<%= item.type+"/"+item._index %>"><h1><%= item.title %></h1></a>
-    <p><%= item.description %></p>
+    <p><%- marked(item.description) %></p>
   <% }) %>
 
 <%- include("partials/footer") %>
